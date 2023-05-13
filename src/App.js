@@ -45,8 +45,8 @@ const App = () => {
     return true
   }
 
-  function requestImageBuilder() {
-    fetch("http://35.240.30.14:31937/", {
+  async function requestImageBuilder() {
+    await fetch("http://35.240.30.14:31937/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -62,8 +62,8 @@ const App = () => {
     .catch(e => {console.log(e); setLogs(logs + "\n" + e.json());})
   }
 
-  function requestKubeManager() {
-    fetch("http://35.240.30.14:31935/", {
+  async function requestKubeManager() {
+    await fetch("http://35.240.30.14:31935/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -79,14 +79,16 @@ const App = () => {
     .catch(e => {console.log(e); setLogs(logs + "\n" + e.json())})
   }
 
-  function goDeploy() {
+  async function goDeploy() {
     setLogs(" ")
     if (CheckFields() !== true) {
       return
     }
-    requestImageBuilder()
+    await requestImageBuilder()
     if (!logs.includes("error")) {
-      requestKubeManager()
+      await requestKubeManager()
+    } else {
+      setLogs(logs + "\n\nUnable to finish deployment due to error")
     }
 
   }
