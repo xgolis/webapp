@@ -45,7 +45,7 @@ const App = () => {
     return true
   }
 
-  async function requestImageBuilder() {
+  function requestImageBuilder() {
     fetch("http://35.240.30.14:31937/", {
       method: "POST",
       headers: {
@@ -58,8 +58,25 @@ const App = () => {
         "gitToken": gitToken
       }),
     }).then(data => data.json())
-    .then((data) => {console.log(data); setLogs(logs + "\n\nImageBuilder:\n" + data.message)})
-    .catch(e => {console.log(e); setLogs(logs + "\n" + e)})
+    .then((data) => {console.log(data); setLogs(logs + "\n\nImageBuilder:\n" + data.message);})
+    .catch(e => {console.log(e); setLogs(logs + "\n" + e.json());})
+  }
+
+  function requestKubeManager() {
+    fetch("http://35.240.30.14:31935/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "name": appName,
+        "username": username,
+        "image": "xgolis/" + appName + ":latest",
+        "appport": appPort
+      }),
+    }).then(data => data.json())
+    .then((data) => {console.log(data); setLogs(logs + data.message)})
+    .catch(e => {console.log(e); setLogs(logs + "\n" + e.json())})
   }
 
   function goDeploy() {
@@ -68,6 +85,9 @@ const App = () => {
       return
     }
     requestImageBuilder()
+    if (!logs.includes("error")) {
+      requestKubeManager()
+    }
 
   }
 
