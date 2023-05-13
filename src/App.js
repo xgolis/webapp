@@ -80,7 +80,6 @@ const App = () => {
   }
 
   async function goDeploy() {
-    setLogs(" ")
     if (CheckFields() !== true) {
       return
     }
@@ -189,7 +188,7 @@ const App = () => {
               <HelpIcon/>
             </Tooltip>
           </div>
-          <Button variant="contained" color="success" onClick={e => goDeploy()}>
+          <Button variant="contained" color="success" onClick={async e => {setLogs(" "); await goDeploy()}}>
             Deploy
           </Button>
         </div>
