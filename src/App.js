@@ -46,7 +46,7 @@ const App = () => {
   }
 
   async function requestImageBuilder() {
-    fetch("http://10.108.109.115:8082", {
+    fetch("http://35.240.3014:31937/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
