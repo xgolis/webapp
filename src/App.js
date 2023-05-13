@@ -16,6 +16,7 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [appName, setAppName] = useState("");
   const [gitToken, setGitToken] = useState("");
+  const [appPort, setAppPort] = useState("");
   var [logs, setLogs] = useState("Fill out fields to begin deployment");
 
   function CheckFields() {
@@ -35,8 +36,29 @@ const App = () => {
       setLogs("Fill out the git token before the deployment start")
       return false
     }
+    if (appPort === "") {
+      setLogs("Fill out the application port before the deployment start")
+      return false
+    }
     setLogs("Username: " + username + "\nApplication name: " + appName + "\nGit URL repository: "+ url + "\nGit token: " + gitToken + "\n")
     return true
+  }
+
+  async function requestImageBuilder() {
+    fetch("http://localhost:8082", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "appname": appName,
+        "username": username,
+        "gitRepo": url,
+        "gitToken": gitToken
+      }),
+    }).then(data => data.json())
+    .then((data) => {console.log(data); setLogs(logs + "\n\nImageBuilder:\n" + data.message)})
+    .catch(e => {console.log(e); setLogs(logs + "\n" + e)})
   }
 
   function goDeploy() {
@@ -44,6 +66,8 @@ const App = () => {
     if (CheckFields() !== true) {
       return
     }
+    requestImageBuilder()
+
   }
 
   return (
@@ -59,10 +83,11 @@ const App = () => {
           </a>
           <a
             className="App-link"
-            href="/Tutorial"
+            href="http://35.240.30.14:32407/#/workloads?namespace=testuser"
             rel="noopener noreferrer"
+            target='_blank'
           >
-            How to deploy
+            Dashboard
           </a>
         </div>
       </header>
@@ -124,6 +149,20 @@ const App = () => {
                         }}
             />
             <Tooltip title="Enter the git token for your git account e.g. ghp_tEsTctOdGh1DKEBxD2lHy2Rj6S3eo4eQQll">
+              <HelpIcon/>
+            </Tooltip>
+          </div>
+          <div className='Urls'>
+            <TextField id="outlined-basic" label="Application port" variant="outlined" onChange={e => {setAppPort(e.target.value)}}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Key />
+                            </InputAdornment>
+                          ),
+                        }}
+            />
+            <Tooltip title="Enter the port which the application runs on insided the container">
               <HelpIcon/>
             </Tooltip>
           </div>

@@ -84,6 +84,8 @@
   overflow-y: auto;
   max-height: 400px;
   min-width: 700px;
+  max-width: 700px;
+  overflow-x: scroll;
   scroll-behavior: smooth;
   background-color: rgb(223, 223, 223);
   border: 1px solid black;
