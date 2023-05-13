@@ -47,7 +47,7 @@ affinity: {}
 
 app:
   namespace: change me!
-  nodePort: 31940
+  nodePort: 31934
   exampleValue: change me
   examplePassword: change me
   exampleConfig: change me
