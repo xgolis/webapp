@@ -24,6 +24,7 @@ const App = () => {
       setLogs("Fill out the username before the deployment start")
       return false
     }
+    //to lower
     if (url === "") {
       setLogs("Fill out the URL before the deployment start")
       return false
@@ -45,7 +46,7 @@ const App = () => {
   }
 
   async function requestImageBuilder() {
-    fetch("http://localhost:8082", {
+    fetch("http://10.108.109.115:8082", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
