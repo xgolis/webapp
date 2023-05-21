@@ -98,13 +98,12 @@ const App = () => {
   }
 
   async function goDeploy() {
-    setLogs("")
     if (CheckFields() !== true) {
       return
     }
     var imageLogs = await requestImageBuilder()
     setLogs(logs + "\n\nImageBuilder:\n" + imageLogs)
-    if (logs.includes("built")) {
+    if (imageLogs.includes("built")) {
       var kubeManagerLogs = await requestKubeManager()
       setLogs(logs + "\n" + kubeManagerLogs)
       setShownButton(true)
