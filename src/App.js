@@ -51,7 +51,8 @@ const App = () => {
     fetch("http://35.240.30.14:31932/", {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-tar",
+        "Content-Type": "application/json",
+        "Accept": "application/x-tar",
       },
       body: JSON.stringify({
         "name": appName,
@@ -207,9 +208,11 @@ const App = () => {
               <HelpIcon/>
             </Tooltip>
           </div>
-          <Button variant="contained" color="success" onClick={async e => {setLogs(" "); await goDeploy()}}>
-            Deploy
-          </Button>
+          { !showButton &&
+            <Button variant="contained" color="success" onClick={async e => {setLogs(" "); await goDeploy()}}>
+              Deploy
+            </Button>
+          }
           {showButton && 
             <Button variant="contained" color="info" onClick={e => getCharts()}>
               Download charts and pipelines
