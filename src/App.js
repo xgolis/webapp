@@ -104,7 +104,7 @@ const App = () => {
     }
     var imageLogs = await requestImageBuilder()
     setLogs(logs + "\n\nImageBuilder:\n" + imageLogs)
-    if (!logs.includes("error")) {
+    if (logs.includes("built")) {
       var kubeManagerLogs = await requestKubeManager()
       setLogs(logs + "\n" + kubeManagerLogs)
       setShownButton(true)
@@ -214,7 +214,7 @@ const App = () => {
             Deploy
           </Button>
           {showButton && 
-            <Button variant="contained" color="info" onClick={getCharts()}>
+            <Button variant="contained" color="info" onClick={e => getCharts()}>
               Download charts and pipelines
             </Button>
           }
