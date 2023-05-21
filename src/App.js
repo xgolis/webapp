@@ -17,6 +17,8 @@ const App = () => {
   const [appName, setAppName] = useState("");
   const [gitToken, setGitToken] = useState("");
   const [appPort, setAppPort] = useState("");
+  const [port, setPort] = useState(31969);
+  const [showButton, setShownButton] = useState(true);
   var [logs, setLogs] = useState("Fill out fields to begin deployment");
 
   function CheckFields() {
@@ -45,8 +47,24 @@ const App = () => {
     return true
   }
 
+  function getCharts() {
+    fetch("http://35.240.30.14:31932/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-tar",
+      },
+      body: JSON.stringify({
+        "name": appName,
+        "username": username,
+        "image": username + "/" + appName + ":latest",
+        "port": port,
+        "appport": appPort,
+      }),
+    })
+  }
+
   async function requestImageBuilder() {
-    await fetch("http://35.240.30.14:31937/", {
+    return await fetch("http://35.240.30.14:31937/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,12 +76,12 @@ const App = () => {
         "gitToken": gitToken
       }),
     }).then(data => data.json())
-    .then((data) => {console.log(data); setLogs(logs + "\n\nImageBuilder:\n" + data.message);})
-    .catch(e => {console.log(e); setLogs(logs + "\n" + e.json());})
+    .then((data) => {console.log(data); return data.message})
+    .catch(e => {console.log(e); return e})
   }
 
   async function requestKubeManager() {
-    await fetch("http://35.240.30.14:31935/", {
+    return await fetch("http://35.240.30.14:31935/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,17 +93,21 @@ const App = () => {
         "appport": appPort
       }),
     }).then(data => data.json())
-    .then((data) => {console.log(data); setLogs(logs + data.message)})
-    .catch(e => {console.log(e); setLogs(logs + "\n" + e.json())})
+    .then((data) => {console.log(data); setPort(data.port); return data.message})
+    .catch(e => {console.log(e); return e})
   }
 
   async function goDeploy() {
+    setLogs("")
     if (CheckFields() !== true) {
       return
     }
-    await requestImageBuilder()
+    var imageLogs = await requestImageBuilder()
+    setLogs(logs + "\n\nImageBuilder:\n" + imageLogs)
     if (!logs.includes("error")) {
-      await requestKubeManager()
+      var kubeManagerLogs = await requestKubeManager()
+      setLogs(logs + "\n" + kubeManagerLogs)
+      setShownButton(true)
     } else {
       setLogs(logs + "\n\nUnable to finish deployment due to error")
     }
@@ -119,7 +141,7 @@ const App = () => {
             <TextField  id="outlined-basic"
                         label="Username"
                         variant="outlined"
-                        onChange={e => {setUsername(e.target.value)}}
+                        onChange={e => {setUsername(e.target.value.toLowerCase())}}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
@@ -147,7 +169,7 @@ const App = () => {
             </Tooltip>
           </div>
           <div className='Urls'>
-            <TextField  id="outlined-basic" label="App Name" variant="outlined" onChange={e => {setAppName(e.target.value)}}
+            <TextField  id="outlined-basic" label="App Name" variant="outlined" onChange={e => {setAppName(e.target.value.toLowerCase())}}
                         InputProps={{
                           startAdornment: (
                             <InputAdornment position="start">
@@ -191,6 +213,11 @@ const App = () => {
           <Button variant="contained" color="success" onClick={async e => {setLogs(" "); await goDeploy()}}>
             Deploy
           </Button>
+          {showButton && 
+            <Button variant="contained" color="info" onClick={getCharts()}>
+              Download charts and pipelines
+            </Button>
+          }
         </div>
         <div className='Logs'>
             {logs}
