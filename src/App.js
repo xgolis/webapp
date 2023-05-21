@@ -50,10 +50,6 @@ const App = () => {
   function getCharts() {
     fetch("http://35.240.30.14:31932/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/x-tar",
-      },
       body: JSON.stringify({
         "name": appName,
         "username": username,
@@ -61,7 +57,19 @@ const App = () => {
         "port": port,
         "appport": appPort,
       }),
+    }).then(response => response.blob())
+    .then(blob => {
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file.tar'); // Replace with desired file name
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
     })
+    .catch(error => {
+      console.error('Error downloading TAR file:', error);
+    });
   }
 
   async function requestImageBuilder() {
