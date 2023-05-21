@@ -108,10 +108,6 @@ const App = () => {
       var kubeManagerLogs = await requestKubeManager()
       setLogs(logs + "\n" + kubeManagerLogs)
       setShownButton(true)
-    } else if (logs.includes("error")) {
-      setLogs(logs + "\n\nUnable to finish deployment due to error")
-    } else {
-      setLogs(logs + "\n" + "LOADING")
     }
 
   }
