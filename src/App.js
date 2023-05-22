@@ -43,6 +43,7 @@ const App = () => {
       setLogs("Fill out the application port before the deployment start")
       return false
     }
+    setLogs("")
     setLogs("Username: " + username + "\nApplication name: " + appName + "\nGit URL repository: "+ url + "\nGit token: " + gitToken + "\n")
     return true
   }
@@ -112,10 +113,10 @@ const App = () => {
     }
     var imageLogs = await requestImageBuilder()
     setLogs(logs + "\n\nImageBuilder:\n" + imageLogs)
-    await delay(100)
+
     if (imageLogs.includes("built")) {
       var kubeManagerLogs = await requestKubeManager()
-      setLogs(logs + "\n" + kubeManagerLogs)
+      setLogs("\n\nImageBuilder:\n" + imageLogs + "\n" + kubeManagerLogs)
       setShownButton(true)
     }
 
