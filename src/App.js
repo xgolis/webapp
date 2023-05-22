@@ -116,7 +116,7 @@ const App = () => {
 
     if (imageLogs.includes("built")) {
       var kubeManagerLogs = await requestKubeManager()
-      setLogs("\n\nImageBuilder:\n" + imageLogs + "\n" + kubeManagerLogs)
+      setLogs("ImageBuilder:\n" + imageLogs + "\n\n" + kubeManagerLogs)
       setShownButton(true)
     }
 
