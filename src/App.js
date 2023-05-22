@@ -112,6 +112,7 @@ const App = () => {
     }
     var imageLogs = await requestImageBuilder()
     setLogs(logs + "\n\nImageBuilder:\n" + imageLogs)
+    await delay(100)
     if (imageLogs.includes("built")) {
       var kubeManagerLogs = await requestKubeManager()
       setLogs(logs + "\n" + kubeManagerLogs)
