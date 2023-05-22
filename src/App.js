@@ -17,7 +17,7 @@ const App = () => {
   const [appName, setAppName] = useState("");
   const [gitToken, setGitToken] = useState("");
   const [appPort, setAppPort] = useState("");
-  const [port, setPort] = useState(31969);
+  const [port, setPort] = useState("31969");
   const [showButton, setShownButton] = useState(true);
   var [logs, setLogs] = useState("Fill out fields to begin deployment");
 
@@ -55,7 +55,7 @@ const App = () => {
         "username": username,
         "image": username + "/" + appName + ":latest",
         "port": port,
-        "appport": appPort,
+        "appport": appPort
       }),
     }).then(response => response.blob())
     .then(blob => {
