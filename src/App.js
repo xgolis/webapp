@@ -18,7 +18,7 @@ const App = () => {
   const [gitToken, setGitToken] = useState("");
   const [appPort, setAppPort] = useState("");
   const [port, setPort] = useState("31969");
-  const [showButton, setShownButton] = useState(true);
+  const [showButton, setShownButton] = useState(false);
   var [logs, setLogs] = useState("Fill out fields to begin deployment");
 
   function CheckFields() {
