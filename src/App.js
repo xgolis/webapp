@@ -62,7 +62,7 @@ const App = () => {
       const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'file.tar'); // Replace with desired file name
+      link.setAttribute('download', 'charts.tar'); // Replace with desired file name
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
@@ -217,7 +217,7 @@ const App = () => {
             </Tooltip>
           </div>
           { !showButton &&
-            <Button variant="contained" color="success" onClick={async e => {setLogs(" "); await goDeploy()}}>
+            <Button variant="contained" color="success" onClick={async e => {await goDeploy()}}>
               Deploy
             </Button>
           }
